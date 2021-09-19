@@ -2,25 +2,30 @@ package silva.hiago.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import silva.hiago.agenda.R;
 import silva.hiago.agenda.dao.AlunoDAO;
 import silva.hiago.agenda.model.Aluno;
+import silva.hiago.agenda.ui.adapter.ListaAlunosAdapter;
 
 public class ListaAlunosActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Lista de alunos";
     public static final String CHAVE_ALUNO = "alunoSelecionado";
     private final AlunoDAO dao = new AlunoDAO();
+    private ListaAlunosAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +33,36 @@ public class ListaAlunosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_alunos);
         setTitle(TITULO_APPBAR);
         configuraFabNovoAluno();
+        configuraLista();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.activity_lista_alunos_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.activity_formulario_alunos_menu_remover){
+
+            confirmaRemocao(item);
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    private void confirmaRemocao(@NonNull final MenuItem item) {
+        new AlertDialog.Builder(this)
+                .setTitle("Removenvo Aluno")
+                .setMessage("Tem certeza que deseja remover ? ")
+                .setPositiveButton("Sim", (dialogInterface, i) -> {
+                    AdapterView.AdapterContextMenuInfo menuInfoForAdapter = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                    Aluno alunoEscolhido = adapter.getItem(menuInfoForAdapter.position);
+                    removeAluno(alunoEscolhido);
+                })
+                .setNegativeButton("Não", null)
+                .show();
     }
 
     private void configuraFabNovoAluno() {
@@ -42,14 +77,26 @@ public class ListaAlunosActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        configuraLista();
+        atualizaAlunos();
+
+    }
+
+    private void atualizaAlunos() {
+        adapter.clear();
+        adapter.addAll(dao.todos());
     }
 
     private void configuraLista() {
         ListView listaDeAlunos = findViewById(R.id.activity_lista_alunos_listview);
-        List<Aluno> todos = dao.todos();
-        configuraAdapter(listaDeAlunos, todos);
+        configuraAdapter(listaDeAlunos);
         configuraListenerDeclickPorItem(listaDeAlunos);
+        registerForContextMenu(listaDeAlunos);
+    }
+
+
+    private void removeAluno(Aluno alunoRemover) {
+        dao.remove(alunoRemover);
+        adapter.remove(alunoRemover);
     }
 
     private void configuraListenerDeclickPorItem(ListView listaDeAlunos) {
@@ -66,10 +113,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
         startActivity(formEdicao);
     }
 
-    private void configuraAdapter(ListView listaDeAlunos, List<Aluno> todos) {
-        listaDeAlunos.setAdapter(new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                todos));
+    private void configuraAdapter(ListView listaDeAlunos) {
+        adapter = new ListaAlunosAdapter(this);
+        listaDeAlunos.setAdapter(adapter);
     }
 }

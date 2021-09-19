@@ -2,9 +2,11 @@ package silva.hiago.agenda.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import silva.hiago.agenda.R;
@@ -29,9 +31,26 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_formulario_aluno);
 
         inicializacaoDosCampos();
-        configuraBotaoSalvar();
 
         carregaAluno();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.activity_formulario_aluno_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.activity_formulario_alunos_menu_remover){
+            finalizaFormulario();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void carregaAluno() {
@@ -53,17 +72,14 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         campoEmail.setText(alunoSelecionado.getEmail());
     }
 
-    private void configuraBotaoSalvar() {
-        Button botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
-        botaoSalvar.setOnClickListener(view -> {
-            preencheAluno();
-            if(alunoSelecionado.temIdValido()){
-                dao.editar(alunoSelecionado);
-            }else{
-                dao.salva(alunoSelecionado);
-            }
-            finish();
-        });
+    private void finalizaFormulario(){
+        preencheAluno();
+        if(alunoSelecionado.temIdValido()){
+            dao.editar(alunoSelecionado);
+        }else{
+            dao.salva(alunoSelecionado);
+        }
+        finish();
     }
 
     private void inicializacaoDosCampos() {

@@ -1,5 +1,7 @@
 package silva.hiago.agenda.dao;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -39,5 +41,12 @@ public class AlunoDAO {
 
     public List<Aluno> todos() {
         return new ArrayList<>(alunos);
+    }
+
+    @SuppressLint("NewApi")
+    public void remove(Aluno aluno) {
+        Optional<Aluno> alunoRemovido = buscaAluno(aluno);
+        if(alunoRemovido.isPresent())
+        alunos.remove(alunoRemovido.get());
     }
 }

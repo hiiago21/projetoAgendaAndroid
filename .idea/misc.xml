@@ -7,6 +7,9 @@
         <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/layout/activity_formulario_aluno.xml" value="0.25" />
         <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/layout/activity_lista_alunos.xml" value="0.36153846153846153" />
         <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/layout/activity_main.xml" value="0.4466666666666667" />
+        <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/layout/item_aluno.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/menu/activity_formulario_aluno_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/hiago.silva/AndroidStudioProjects/agenda/app/src/main/res/menu/activity_lista_alunos_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/hiago.silva/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.20572916666666666" />
       </map>
     </option>
@@ -16,5 +19,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.36666666666666664" />
+      </ProjectState>
+    </option>
   </component>
 </project>
